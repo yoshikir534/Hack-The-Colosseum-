@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as plt
 
 
 #some to most of the calculations were assisted in some way
@@ -31,7 +32,7 @@ def simulate_rocket():
 
     m_prev = mass  # Initialize m_prev before the loop
 
-    for t in range(2000):
+    for _ in range(2000):
 
         if fuel_mass > 0 and mass > 0:
             fuel_burn = dt * fuel_burn_rate
@@ -64,6 +65,16 @@ def simulate_rocket():
         x_values.append(x)
         y_values.append(y)
 
-x_values, y_values = simulate_rocket()
-print(x_values)
-print(y_values) 
+    return x_values, y_values
+
+if __name__ == "__main__":
+    x_values, y_values = simulate_rocket()
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(x_values, y_values, marker='.', markersize=2, linewidth=1)
+    plt.xlabel('Range (m)')
+    plt.ylabel('Altitude (m)')
+    plt.title('Rocket trajectory')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
