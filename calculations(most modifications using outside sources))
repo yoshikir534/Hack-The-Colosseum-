@@ -6,15 +6,25 @@ import matplotlib.pyplot as plt
 
 
 def simulate_rocket():
-    mass = 10000  # kg
-    thrust = 80000  # N
-    angle = 45  # degrees
-    drag_coefficient = 0.8  # Drag coefficient
-    area = 5  # m^2
-    air_density = 1.225  # kg/m^3
-    fuel_burn_rate = 0.5  # kg/s
-    fuel_mass = 3000  # kg
-    ve = 3000  # m/s (exhaust velocity)
+    def _input_float(prompt, default):
+        val = input(f"{prompt} [{default}]: ")
+        if val.strip() == "":
+            return float(default)
+        try:
+            return float(val)
+        except ValueError:
+            print("Invalid input, using default.")
+            return float(default)
+
+    mass = _input_float("mass (kg)", 10000)
+    thrust = _input_float("Thrust (N)", 80000)
+    angle = _input_float("Launch angle (degrees)", 45)
+    drag_coefficient = _input_float("Drag coefficient", 0.8)
+    area = _input_float("Frontal area (m^2)", 5)
+    air_density = _input_float("Air density (kg/m^3)", 1.225)
+    fuel_burn_rate = _input_float("Fuel burn rate (kg/s)", 0.5)
+    fuel_mass = _input_float("Initial fuel mass (kg)", 3000)
+    ve = _input_float("Exhaust velocity (m/s)", 3000)
 
     vx = 0.0  # Initialize velocity
     vy = 0.0
