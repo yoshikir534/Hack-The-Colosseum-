@@ -1,60 +1,69 @@
 import math
 
-mass = 10000  # kg
-thrust = 80000  # N
-angle = 45  # degrees
-drag_coefficient = 0.8  # Drag coefficient
-area = 5  # m^2
-air_density = 1.225  # kg/m^3
-fuel_burn_rate = 0.5  # kg/s
-fuel_mass = 3000  # kg
-ve = 3000  # m/s (exhaust velocity)
 
-vx = 0.0  # Initialize velocity
-vy = 0.0
+#some to most of the calculations were assisted in some way
 
-# Apply initial thrust
-vx += math.cos(math.radians(angle)) * thrust / mass
-vy += math.sin(math.radians(angle)) * thrust / mass
 
-dt = 0.1  # time step
+def simulate_rocket():
+    mass = 10000  # kg
+    thrust = 80000  # N
+    angle = 45  # degrees
+    drag_coefficient = 0.8  # Drag coefficient
+    area = 5  # m^2
+    air_density = 1.225  # kg/m^3
+    fuel_burn_rate = 0.5  # kg/s
+    fuel_mass = 3000  # kg
+    ve = 3000  # m/s (exhaust velocity)
 
-x = 0.0
-y = 0.0
-x_values = [x]
-y_values = [y]
+    vx = 0.0  # Initialize velocity
+    vy = 0.0
 
-m_prev = mass  # Initialize m_prev before the loop
+    # Apply initial thrust
+    vx += math.cos(math.radians(angle)) * thrust / mass
+    vy += math.sin(math.radians(angle)) * thrust / mass
 
-for t in range(2000):
+    dt = 0.1  # time step
 
-    if fuel_mass > 0 and mass > 0:
-        fuel_burn = dt * fuel_burn_rate
-        fuel_mass -= fuel_burn
-        if fuel_mass < 0:
-            fuel_burn += fuel_mass
-            fuel_mass = 0
-        m_prev = mass
-        mass -= fuel_burn
+    x = 0.0
+    y = 0.0
+    x_values = [x]
+    y_values = [y]
 
-        # Apply rocket thrust using Tsiolkovsky rocket equation
-        if m_prev > mass:
-            delta_v = ve * math.log(m_prev / mass)
-            vx += math.cos(math.radians(angle)) * delta_v
-            vy += math.sin(math.radians(angle)) * delta_v
+    m_prev = mass  # Initialize m_prev before the loop
 
-    speed = math.sqrt(vx**2 + vy**2)
-    drag = 0.5 * air_density * speed**2 * drag_coefficient * area
-    ax = -drag * vx / mass
-    ay = -9.81 - (drag * vy / mass)
-    vx += ax * dt
-    vy += ay * dt
-    y += vy * dt
-    x += vx * dt
+    for t in range(2000):
 
-    if y < 0:
-        y = 0.0
-        break
+        if fuel_mass > 0 and mass > 0:
+            fuel_burn = dt * fuel_burn_rate
+            fuel_mass -= fuel_burn
+            if fuel_mass < 0:
+                fuel_burn += fuel_mass
+                fuel_mass = 0
+            m_prev = mass
+            mass -= fuel_burn
 
-    x_values.append(x)
-    y_values.append(y)
+            # Apply rocket thrust using Tsiolkovsky rocket equation (???)
+            if m_prev > mass:
+                delta_v = ve * math.log(m_prev / mass)
+                vx += math.cos(math.radians(angle)) * delta_v
+                vy += math.sin(math.radians(angle)) * delta_v
+
+        speed = math.sqrt(vx**2 + vy**2)
+        drag = 0.5 * air_density * speed**2 * drag_coefficient * area
+        ax = -drag * vx / mass
+        ay = -9.81 - (drag * vy / mass)
+        vx += ax * dt
+        vy += ay * dt
+        y += vy * dt
+        x += vx * dt
+
+        if y < 0:
+            y = 0.0
+            break
+
+        x_values.append(x)
+        y_values.append(y)
+
+x_values, y_values = simulate_rocket()
+print(x_values)
+print(y_values) 
